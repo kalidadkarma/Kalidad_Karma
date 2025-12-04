@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Redireccionador</title>
+</head>
+<body>
+<script>
+(async function(){
+  try {
+    // evita cache para ver cambios inmediatos
+    const resp = await fetch('redirect.json', {cache: 'no-store'});
+    if (!resp.ok) throw new Error('No se pudo leer redirect.json');
+    const j = await resp.json();
+    const target = j.target || '/';
+    // redirige a la URL indicada (reemplaza historial)
+    window.location.replace(target);
+  } catch (err) {
+    document.body.innerHTML = '<h2>Error al redirigir</h2><pre>' + err.message + '</pre>';
+    console.error(err);
+  }
+})();
+</script>
+</body>
+</html>
