@@ -1,26 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Redireccionador</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redireccionando...</title>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LMX07P785E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-LMX07P785E');
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 70px;
+        }
+    </style>
 </head>
 <body>
+
+<h2>Redirigiendo, por favor espera...</h2>
+
 <script>
-(async function(){
-  try {
-    // evita cache para ver cambios inmediatos
-    const resp = await fetch('redirect.json', {cache: 'no-store'});
-    if (!resp.ok) throw new Error('No se pudo leer redirect.json');
-    const j = await resp.json();
-    const target = j.target || '/';
-    // redirige a la URL indicada (reemplaza historial)
-    window.location.replace(target);
-  } catch (err) {
-    document.body.innerHTML = '<h2>Error al redirigir</h2><pre>' + err.message + '</pre>';
-    console.error(err);
-  }
-})();
+    // --- Cargar dinámica desde redirect.json ---
+    fetch("redirect.json")
+        .then(response => response.json())
+        .then(data => {
+            if (data.url) {
+                // Espera breve para permitir que GA registre la visita
+                setTimeout(() => {
+                    window.location.href = data.url;
+                }, 800);
+            } else {
+                document.body.innerHTML = "<h2>Error: redirect.json no contiene 'url'.</h2>";
+            }
+        })
+        .catch(err => {
+            console.error("Error cargando redirect.json", err);
+            document.body.innerHTML = "<h2>Error cargando redirect.json</h2>";
+        });
 </script>
+
 </body>
 </html>
