@@ -29,7 +29,7 @@
 
 <script>
     // --- Cargar dinámica desde redirect.json ---
-    fetch("redirect.json")
+    fetch("redirect.json", { cache: "no-store" })
         .then(response => response.json())
         .then(data => {
             if (data.url) {
@@ -49,3 +49,4 @@
 
 </body>
 </html>
+
